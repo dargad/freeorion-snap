@@ -1,0 +1,48 @@
+name: freeorion-empanada
+version: "0.4.7.1snap1"
+summary: turn-based space empire and galactic conquest (4X) computer game
+description: |
+  FreeOrion is a free, open source, turn-based space empire and galactic
+  conquest (4X) computer game being designed and built by the FreeOrion project.
+  FreeOrion is inspired by the tradition of the Master of Orion games, but is
+  not a clone or remake of that series or any other game.
+grade: stable
+confinement: strict
+icon: snap/gui/icon.png
+
+apps:
+    freeorion-empanada:
+        command: freeorion --save-dir $SNAP_USER_DATA/save --resource-dir $SNAP/share/freeorion/default
+        plugs: [home, pulseaudio, opengl, network, screen-inhibit-control, browser-support, x11, wayland]
+        environment:
+            LD_LIBRARY_PATH: $SNAP/lib/freeorion:$LD_LIBRARY_PATH
+            LIBGL_DRIVERS_PATH: $SNAP/usr/lib/x86_64-linux-gnu/dri
+parts:
+    freeorion:
+        source: https://github.com/freeorion/freeorion.git
+        source-tag: v0.4.7.1
+        source-type: git
+        plugin: cmake
+        build-packages:
+            - cmake
+            - debhelper
+            - dpkg-dev
+            - libalut-dev
+            - libboost-all-dev
+            - libfreetype6-dev
+            - libgl1-mesa-dev
+            - libglew-dev
+            - libglu1-mesa-dev
+            - libjpeg-dev
+            - libogg-dev
+            - libopenal-dev
+            - libpng-dev
+            - libsdl2-dev
+            - libtiff-dev
+            - libvorbis-dev
+            - pkg-config
+            - python
+        stage-packages:
+            - mesa-utils
+            - libgl1-mesa-dri
+            - python
