@@ -1,5 +1,5 @@
 name: freeorion-empanada
-version: "0.4.7.1snap1"
+version: "0.4.8snap1"
 summary: turn-based space empire and galactic conquest (4X) computer game
 description: |
   FreeOrion is a free, open source, turn-based space empire and galactic
@@ -8,20 +8,23 @@ description: |
   not a clone or remake of that series or any other game.
 grade: stable
 confinement: strict
-icon: snap/gui/icon.png
 
 apps:
     freeorion-empanada:
-        command: freeorion --save-dir $SNAP_USER_DATA/save --resource-dir $SNAP/share/freeorion/default
-        plugs: [home, pulseaudio, opengl, network, screen-inhibit-control, browser-support, x11, wayland]
+        command: desktop-launch freeorion --save-dir $SNAP_USER_DATA/save --resource-dir $SNAP/share/freeorion/default
+        plugs: [home, pulseaudio, opengl, network, screen-inhibit-control, browser-support, x11]
+        desktop: share/applications/freeorion.desktop
         environment:
-            LD_LIBRARY_PATH: $SNAP/lib/freeorion:$LD_LIBRARY_PATH
+            LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/lib/freeorion
             LIBGL_DRIVERS_PATH: $SNAP/usr/lib/x86_64-linux-gnu/dri
 parts:
     freeorion:
         source: https://github.com/freeorion/freeorion.git
-        source-tag: v0.4.7.1
+        source-tag: v0.4.8
         source-type: git
+        override-build: |
+            sed -i.bak -e 's|Icon=freeorion$|Icon=${SNAP}/meta/gui/icon.png|g' ../src/freeorion.desktop
+            snapcraftctl build
         plugin: cmake
         build-packages:
             - cmake
@@ -46,3 +49,4 @@ parts:
             - mesa-utils
             - libgl1-mesa-dri
             - python
+        after: [ desktop-gtk3 ]
