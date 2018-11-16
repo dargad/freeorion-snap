@@ -1,5 +1,5 @@
 name: freeorion-empanada
-version: "0.4.8snap1"
+version: "0.4.8snap2"
 summary: turn-based space empire and galactic conquest (4X) computer game
 description: |
   FreeOrion is a free, open source, turn-based space empire and galactic
@@ -11,7 +11,7 @@ confinement: strict
 
 apps:
     freeorion-empanada:
-        command: desktop-launch freeorion --save-dir $SNAP_USER_DATA/save --resource-dir $SNAP/share/freeorion/default
+        command: desktop-launch freeorion -S $SNAP_USER_COMMON/save # --resource-dir $SNAP/share/freeorion/default
         plugs: [home, pulseaudio, opengl, network, screen-inhibit-control, browser-support, x11]
         desktop: share/applications/freeorion.desktop
         environment:
@@ -20,7 +20,8 @@ apps:
 parts:
     freeorion:
         source: https://github.com/freeorion/freeorion.git
-        source-tag: v0.4.8
+        source-branch: release-v0.4.8
+        #source-tag: v0.4.8
         source-type: git
         override-build: |
             sed -i.bak -e 's|Icon=freeorion$|Icon=${SNAP}/meta/gui/icon.png|g' ../src/freeorion.desktop
